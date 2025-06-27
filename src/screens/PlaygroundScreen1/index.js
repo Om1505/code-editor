@@ -75,19 +75,16 @@ export const PlaygroundScreen1 = () => {
       try {
         setLoading(true);
         const response = await axios.post(
-          'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyC6Yfqw9JC8vsmgEkIDe6RJ4LscPuiq6aU',
-          {
-            contents: [
-              {
-                parts: [
-                  {
-                    text: chatInput,
-                  },
-                ],
-              },
-            ],
-          }
-        );
+  `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${process.env.REACT_APP_GEMINI_API_KEY2}`,
+  {
+    contents: [
+      {
+        parts: [{ text: chatInput }],
+      },
+    ],
+  }
+);
+
         console.log(response);
         const botResponse = response.data.candidates[0].content.parts[0].text;
         setLoading(false);
