@@ -1,15 +1,3 @@
-// const button=document.getElementById("export")
-// const textArea=document.getElementsByTagName("textarea")[0];
-// button.addEventListener("click",()=>{
-//     console.log(textArea.value)
-//     const blob=new Blob([textArea.value],{type: 'text/plain'})
-//     const url=URL.createObjectURL(blob);
-//     console.log(url)
-//     const link=document.createElement("a");
-//     link.href=url;
-//     link.download="myfile.txt"
-//     link.click();
-// })
 const languageCodeMap={
     cpp: 54,
     python: 92,
@@ -43,8 +31,6 @@ const options = {
 	})
 };
 
-
-//1e9e1d0f-ab5a-46b8-b6ff-df158bf1d549
 async function callApi() {
     try {
         const response = await fetch(url, options);
@@ -56,12 +42,11 @@ async function callApi() {
         }
 
         const tokenId = result.token;
-        let statusCode = 2; // Initialize statusCode for the loop
-        let maxRetries = 20; // Limit retries to prevent infinite loops
+        let statusCode = 2; 
+        let maxRetries = 20; 
         let retries = 0;
         
         while ((statusCode === 2 || statusCode === 1) && retries < maxRetries) {
-            // Delay polling to give the API time to process
             await new Promise((resolve) => setTimeout(resolve, 1000));
             const submissionResult = await getSubmission(tokenId);
             if (!submissionResult) {
@@ -83,9 +68,6 @@ async function callApi() {
     }
 }
 
-//callApi();
-
-
 async function getSubmission(tokenId){
     const url = `https://judge0-ce.p.rapidapi.com/submissions/${tokenId}?base64_encoded=true&fields=*`;
 const options = {
@@ -99,18 +81,10 @@ const options = {
 try {
 	const response = await fetch(url, options);
 	const result = await response.text();
-    const submissionResult = JSON.parse(result);  // Parse the string into an object
+    const submissionResult = JSON.parse(result);  
         return submissionResult;
-	//console.log(result);
 } catch (error) {
 	console.error(error);
 }
 }
-//getSubmission("1e9e1d0f-ab5a-46b8-b6ff-df158bf1d549")
-// let a = "aravind";
-// let a64=btoa(a);
-// console.log(a,a64)
-
-// let b=atob(a64);
-// console.log(b)
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FaPaperPlane } from 'react-icons/fa';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
-import './GeminiChat.scss'; // Import your SCSS file
+import './GeminiChat.scss'; 
 
 export const GeminiChat = () => {
   const [messages, setMessages] = useState([]);
