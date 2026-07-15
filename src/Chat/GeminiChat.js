@@ -11,39 +11,49 @@ export const GeminiChat = () => {
   const [isChatVisible, setIsChatVisible] = useState(false);
 
   const handleSendMessage = async () => {
-    if (input.trim()) {
-      const newMessages = [...messages, { text: input, user: true }];
-      setMessages(newMessages);
-      setInput('');
+  if (!input.trim()) return;
 
-      try {
-        setLoading(true);
-        const response = await axios.post(
-          'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=REACT_APP_GEMINI_API_KEY',
-          {
-            contents: [
-              {
-                parts: [
-                  {
-                    text: input,
-                  },
-                ],
-              },
-            ],
-          }
-        );
-        console.log(response);
-        const botResponse = response.data.candidates[0].content.parts[0].text;
-        setLoading(false);
-        setMessages([...newMessages, { text: botResponse, user: false }]);
-      } catch (error) {
-        console.error('Error sending message:', error);
-        setLoading(false);
-        setMessages([...newMessages, { text: 'Error: Could not get response from AI', user: false }]);
-      }
-    }
-  };
+  const userMessage = input;
 
+  setMessages((prev) => [...prev, { text: userMessage, user: true }]);
+  setInput("");
+  setLoading(true);
+
+  try {
+    const res = await axios({
+      method: "POST",
+      url: "http://localhost:5000/api/v1/gemini/chat",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        prompt: userMessage,
+      },
+    });
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        text: res.data.reply,
+        user: false,
+      },
+    ]);
+  } catch (err) {
+    console.error("FULL ERROR:", err);
+
+    alert(JSON.stringify(err.response?.data || err.message));
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        text: "Error: Could not get response from AI",
+        user: false,
+      },
+    ]);
+  }
+
+  setLoading(false);
+};
   return (
     <div>
       <button
