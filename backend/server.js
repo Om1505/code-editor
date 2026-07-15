@@ -79,6 +79,12 @@ app.use((req, res) => {
 
 // ================= Start Server =================
 
-app.listen(PORT, () => {
-  console.log(`✅ Backend running on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 5000;
+
+  app.listen(PORT, () => {
+    console.log(`Backend running on ${PORT}`);
+  });
+}
+
+module.exports = app;
